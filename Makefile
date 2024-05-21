@@ -14,3 +14,8 @@ clean:
 install:
 	@echo "Installing dependencies..."
 	@pip install antlr4-tools
+
+test_cases:
+	@echo "Generating test cases..."
+	@grammarinator-process gqlex.g4 -o tests/fuzzer/ --no-actions
+	@grammarinator-generate gqlexGenerator.gqlexGenerator -r document -d 25 -n 100 -o tests/cases/test_%d.gql --sys-path tests/fuzzer/

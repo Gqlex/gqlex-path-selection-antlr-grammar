@@ -53,6 +53,14 @@ The `gqlex.g4` file defines the syntax for `gqlex`, including:
 - Range expressions for selecting specific ranges of nodes.
 - Conditions for filtering nodes based on various criteria.
 
+## Testing
+
+To generate the test cases for the grammar, run the following command:
+
+```bash
+make test_cases
+```
+
 ## License
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
