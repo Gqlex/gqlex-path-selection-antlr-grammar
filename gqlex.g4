@@ -1,8 +1,35 @@
 grammar gqlex;
 
 // Lexer rules
-NODE: '/';
-ALL: '//';
+fragment NEGATIVE_SIGN
+    : '-'
+    ;
+    
+fragment NONZERO_DIGIT
+    : [1-9]
+    ;
+
+fragment DIGIT
+    : [0-9]
+    ;
+
+fragment LETTER
+    : [a-zA-Z]
+    ;
+
+fragment NAME_START
+    : LETTER
+    | '_'
+    ;
+
+fragment NAME_CONTINUE
+    : LETTER
+    | '_'
+    | DIGIT
+    ;
+
+SLASH: '/';
+DOUBLE_SLASH: '//';
 DOTS: '...';
 
 RANGE_OPEN: '{';
@@ -26,8 +53,17 @@ COND_OR: '||';
 
 WS: [ \t\r\n]+ -> skip;
 
-INT: [0-9]+;
-VALUE: [a-zA-Z_]+;
+POSITIVE_INT
+    : NONZERO_DIGIT DIGIT*
+    ;
+
+NEGATIVE_INT
+    : NEGATIVE_SIGN POSITIVE_INT
+    ;
+
+NAME
+    : NAME_START NAME_CONTINUE*
+    ;
 
 // Parser rules
 document
@@ -40,19 +76,19 @@ pathExpression
     ;
 
 rootPathExpression
-    : (ALL | NODE) (pathElement (NODE pathElement)*)+
+    : (DOUBLE_SLASH | SLASH) (pathElement (SLASH pathElement)*)?
     ;
 
 rangePathExpression
-    : RANGE_OPEN (INT? COLON INT?) RANGE_CLOSE rootPathExpression
+    : RANGE_OPEN (rangeStartIntValue? COLON rangeEndIntValue?) RANGE_CLOSE rootPathExpression
     ;
 
 elementSelectionExpression
-    : lValue EQUALS rValue
+    : nameValue EQUALS nameValue
     ;
 
 pathElement
-    : lValue (LBRACK elementSelectionExpression RBRACK)? (LPAREN conditionExpression RPAREN)?
+    : nameValue (LBRACK elementSelectionExpression RBRACK)? (LPAREN conditionExpression RPAREN)?
     | DOTS
     ;
 
@@ -71,13 +107,22 @@ conditionLogicalOperator
     ;
 
 conditionExpression
-    : lValue conditionOperator rValue (conditionLogicalOperator conditionExpression)?
+    : nameValue conditionOperator (nameValue | intValue)
+    | conditionExpression conditionLogicalOperator conditionExpression 
     ;
 
-lValue
-    : VALUE
+nameValue
+    : NAME
     ;
 
-rValue
-    : (INT | VALUE)+
+intValue
+    : POSITIVE_INT | NEGATIVE_INT | '0'
+    ;
+
+rangeEndIntValue
+    : POSITIVE_INT
+    ;
+
+rangeStartIntValue
+    : POSITIVE_INT | '0'
     ;
