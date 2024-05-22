@@ -18,6 +18,12 @@ test_cases: install
 	@mkdir -p tests/fuzzer/ tests/cases/
 	@source gqlex/bin/activate; grammarinator-process gqlex.g4 -o tests/fuzzer/ --no-actions
 	@source gqlex/bin/activate; grammarinator-generate gqlexGenerator.gqlexGenerator -r document -d 25 -n 10 -o tests/cases/test_%d.gql --sys-path tests/fuzzer/
+	@echo "Test cases generated in tests/cases/"
+
+test: clean test_cases
+	@echo "Running tests..."
+	@$(MAKE) lang=Go gen_dir=gen/antlr/parser package=parser
+	@for i in {0..9}; do echo "Running for test_$$i.gql";go run main.go tests/cases/test_$$i.gql;echo ""; done
 
 clean:
-	rm -rf $(gen_dir)/* tests/ gqlex/ gen/
+	rm -rf $(gen_dir)/ tests/ gqlex/ gen/
