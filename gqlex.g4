@@ -92,7 +92,7 @@ pathElement
     | DOTS
     ;
 
-conditionOperator
+comparisonOperator
     : COND_EQ
     | COND_NE
     | COND_GT
@@ -107,7 +107,7 @@ conditionLogicalOperator
     ;
 
 conditionExpression
-    : nameValue conditionOperator (nameValue | intValue)
+    : nameValue comparisonOperator (nameValue | intValue)
     | conditionExpression conditionLogicalOperator conditionExpression 
     ;
 
