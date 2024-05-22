@@ -1,1 +1,3 @@
 .antlr
+gqlex/
+__pycache__/

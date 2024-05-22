@@ -15,6 +15,7 @@ To use this project, you will need the following installed on your system:
 
 - Make
 - Python3 (for running the ANTLR tool)
+- Golang (for testing the generated code, optional)
 - `pip`
 
 Use the following command to install the dependencies:
@@ -33,16 +34,16 @@ make
 
 This will use the `Makefile` to invoke ANTLR and generate the necessary files (defaults to Java).
 
-You can also specify the target language by setting the `lang` variable (to any of the supported ANTLR target languages, such as `Python3`, `Go`, `Cpp`, etc.):
+Supported variables:
+
+- `lang`: The target language for the generated code (defaults to `Java`, supports ANTLR target languages, such as `Python3`, `Go`, `Cpp`, etc.).
+- `gen_dir`: The output directory for the generated code (defaults to `gen`).
+- `package`: The package name for the generated code (defaults to `com.intuit.oss.gqlex.parser`).
+
+For example, to generate Python3 code, run the following command:
 
 ```bash
-make lang=Python3
-```
-
-You may also want to specify the output directory for the generated code:
-
-```bash
-make gen_dir=src/main/java
+make lang=Python3 gen_dir=gen_python package=parser_python
 ```
 
 ### Grammar Overview
@@ -52,6 +53,20 @@ The `gqlex.g4` file defines the syntax for `gqlex`, including:
 - Path expressions for navigating through GraphQL documents.
 - Range expressions for selecting specific ranges of nodes.
 - Conditions for filtering nodes based on various criteria.
+
+## Testing
+
+To generate the test cases for the grammar, run the following command:
+
+```bash
+make clean test_cases
+```
+
+You can also generate the test cases and run them in one step:
+
+```bash
+make test
+```
 
 ## License
 
