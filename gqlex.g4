@@ -108,6 +108,7 @@ conditionLogicalOperator
 
 conditionExpression
     : nameValue comparisonOperator (nameValue | intValue)
+    | LPAREN conditionExpression RPAREN
     | conditionExpression conditionLogicalOperator conditionExpression 
     ;
 
