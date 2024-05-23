@@ -16,8 +16,9 @@ install: requirements.txt
 test_cases: install
 	@echo "Generating test cases..."
 	@mkdir -p tests/fuzzer/ tests/cases/
-	@source gqlex/bin/activate; grammarinator-process gqlex.g4 -r document -o tests/fuzzer/ --no-actions
-	@source gqlex/bin/activate; grammarinator-generate gqlexGenerator.gqlexGenerator -r document -d 25 -n 10 -o tests/cases/test_%d.gql --sys-path tests/fuzzer/
+	@source gqlex/bin/activate; \
+		grammarinator-process gqlex.g4 -r document -o tests/fuzzer/ --no-actions; \
+		grammarinator-generate gqlexGenerator.gqlexGenerator -r document -d 25 -n 10 -o tests/cases/test_%d.gql --sys-path tests/fuzzer/
 	@echo "Test cases generated in tests/cases/"
 
 test: clean test_cases
