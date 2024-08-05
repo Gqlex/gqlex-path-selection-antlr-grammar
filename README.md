@@ -1,4 +1,4 @@
-# gqlex-antlr-grammar
+# gqlex-path-selection-antlr-grammar
 
 This repository contains the ANTLR grammar definition for `gqlex`, a language designed to select nodes in GraphQL documents using path expressions.
 
